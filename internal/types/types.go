@@ -2,18 +2,23 @@ package types
 
 import "time"
 
+// Point represents the order of the user and request
+type Point struct {
+	User    int `json:"u"`
+	Request int `json:"r"`
+}
+
 // RequestInfo represents the structure of request informations
 type RequestInfo struct {
-	UserPosition int       `json:"userPosition"`
-	UserID       string    `json:"userId"`
-	RequestID    string    `json:"requestId"`
-	ScenarioID   string    `json:"scenarioID"`
-	ScenarioName string    `json:"scenarioName"`
-	Timestamp    time.Time `json:"timestamp"`
-	Duration     string    `json:"duration"`
-	Status       string    `json:"status"`
-	StatusCode   int       `json:"statusCode"`
-	Error        string    `json:"error,omitempty"`
+	UserID     string    `json:"userId"`
+	RequestID  string    `json:"requestId"`
+	Position   Point     `json:"position"`
+	ScenarioID string    `json:"scenarioID"`
+	Timestamp  time.Time `json:"timestamp"`
+	Duration   string    `json:"duration"`
+	Status     string    `json:"status"`
+	StatusCode int       `json:"statusCode"`
+	Error      string    `json:"error,omitempty"`
 }
 
 // TestResult represents the structure of the result
