@@ -1,0 +1,69 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.container-fluid {
+  max-width: 1400px; /* Limita a largura para melhor visualização em telas grandes */
+}
+
+h1 {
+  color: #343a40;
+}
+
+.card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.card-header {
+  background-color: #e9ecef;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.75rem 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.card-body small {
+  color: #6c757d;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.card-body h5 {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #212529;
+}
+
+.chart-container-small {
+  width: 120px; /* Tamanho fixo para o gráfico de pizza pequeno */
+  height: 120px;
+  flex-shrink: 0; /* Impede que ele encolha */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-container-large {
+  position: relative; /* Necessário para o canvas se expandir */
+  height: 400px; /* Altura fixa para os gráficos maiores */
+  width: 100%;
+}
+
+.dashboard-content {
+  margin-top: 20px;
+}
+
+/* Estilos para a tabela do gráfico de pizza */
+.table-sm td {
+  padding: 0.2rem;
+  border-top: none;
+}
+.table-sm .badge {
+  min-width: 45px;
+  text-align: center;
+}
