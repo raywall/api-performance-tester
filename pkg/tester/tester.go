@@ -102,9 +102,9 @@ func (t *Tester) Save(outputFile string, obj interface{}) error {
 }
 
 func (t *Tester) Show() error {
-	if t.Result == types.TestResult{} {
-		return errors.New("failed to show the performance test result")
-	}
+	// if t.Result == types.TestResult{} {
+	// 	return errors.New("failed to show the performance test result")
+	// }
 
 	// Exibir resultados no console
 	fmt.Printf("\nResultados do Teste de Performance:\n")
