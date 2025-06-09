@@ -2,3 +2,4 @@ node_modules/
 test_*.json
 .vscode/
 .angular/
+.DS_Store
