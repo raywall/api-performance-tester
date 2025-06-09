@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PerformanceReport, Request } from '../core/models/performance-report.model';
 import { Observable, Subject } from 'rxjs';
 import { formatDateTime, formatDuration } from '../core/utils/date-time.utils';
+import { parseISO } from 'date-fns';
 
 @Injectable({
   providedIn: 'root'
@@ -56,21 +57,22 @@ export class PerformanceDataService {
     const executionDurationMs = lastRequestTimestamp - firstRequestTimestamp;
 
     // Calcular RPS ao longo do tempo
-    const rpsData: { x: string, y: number, status: string }[] = [];
-    const responseTimeData: { x: string, y: number }[] = [];
+    const rpsData: { x: Date, y: number, status: string }[] = []; // Altere x para Date
+    const responseTimeData: { x: Date, y: number }[] = []; // Altere x para Date
 
     const sortedRequests = [...report.result.requests].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
     sortedRequests.forEach(req => {
+      const timestampDate = parseISO(req.timestamp); // Converta a string ISO para um objeto Date
       rpsData.push({
-        x: formatDateTime(req.timestamp),
-        y: report.result.requestsPerSecond, // Simplificado, idealmente seria um cálculo dinâmico por janela
+        x: timestampDate, // Use o objeto Date
+        y: report.result.requestsPerSecond,
         status: req.status
       });
 
       if (req.status === 'success') {
         responseTimeData.push({
-          x: formatDateTime(req.timestamp),
+          x: timestampDate, // Use o objeto Date
           y: this.convertDurationToMs(req.duration)
         });
       }

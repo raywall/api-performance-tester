@@ -1,9 +1,11 @@
+import { parseISO, format } from 'date-fns';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { PerformanceDataService } from './services//performance-data.service';
+import { PerformanceDataService } from './services/performance-data.service';
 import { PerformanceReport } from './core/models/performance-report.model';
 import { ChartConfiguration, ChartData, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { formatDateTime, formatDuration } from './core/utils/date-time.utils';
+import { ptBR } from 'date-fns/locale';
 
 @Component({
   selector: 'app-root',
@@ -46,12 +48,14 @@ export class AppComponent implements OnInit {
       }
     }
   };
+
   public pieChartData: ChartData<'pie', number[], string | string[]> = {
     labels: ['Requisições OK', 'Requisições com Erro'],
     datasets: [{
       data: []
     }]
   };
+
   public pieChartType: ChartType = 'pie';
 
   // Line Chart - Requests per Second
@@ -62,7 +66,7 @@ export class AppComponent implements OnInit {
       x: {
         type: 'time',
         time: {
-          parser: 'dd/MM/yyyy HH:mm:ss',
+          // parser: 'dd/MM/yyyy HH:mm:ss',
           tooltipFormat: 'dd/MM/yyyy HH:mm:ss',
           unit: 'second'
         },
@@ -90,17 +94,19 @@ export class AppComponent implements OnInit {
             return tooltipItems[0].label;
           },
           label: (context) => {
-            return `RPS: ${context.raw.y} (${context.dataset.label})`;
+            const dataPoint = context.raw as { x: any, y: number };
+            return `RPS: <span class="math-inline">\{dataPoint\.y\} \(</span>{context.dataset.label})`;
           }
         }
       }
     }
   };
+
   public rpsChartData: ChartData<'line'> = {
     datasets: []
   };
-  public rpsChartType: ChartType = 'line';
 
+  public rpsChartType: ChartType = 'line';
 
   // Line Chart - Response Time
   public responseTimeChartOptions: ChartConfiguration['options'] = {
@@ -137,17 +143,19 @@ export class AppComponent implements OnInit {
             return tooltipItems[0].label;
           },
           label: (context) => {
-            return `Tempo: ${context.raw.y}ms`;
+            const dataPoint = context.raw as { x: any, y: number };
+            return `Tempo: ${dataPoint.y}ms`;
           }
         }
       }
     }
   };
+
   public responseTimeChartData: ChartData<'line'> = {
     datasets: []
   };
+  
   public responseTimeChartType: ChartType = 'line';
-
 
   constructor(private performanceDataService: PerformanceDataService) { }
 
@@ -186,15 +194,35 @@ export class AppComponent implements OnInit {
     const rpsFailedData = chartData.requestsPerSecondData.filter(d => d.status === 'failed').map(d => ({ x: d.x, y: d.y }));
 
     this.rpsChartData.datasets = [
-      { data: rpsSuccessData, label: 'OK', borderColor: 'rgba(75,192,192,1)', backgroundColor: 'rgba(75,192,192,0.2)', fill: false, pointRadius: 0 },
-      { data: rpsFailedData, label: 'Erro', borderColor: 'rgba(255,99,132,1)', backgroundColor: 'rgba(255,99,132,0.2)', fill: false, pointRadius: 0 }
+      { 
+        data: rpsSuccessData, 
+        label: 'OK', 
+        borderColor: 'rgba(75,192,192,1)', 
+        backgroundColor: 'rgba(75,192,192,0.2)', 
+        fill: false, 
+        pointRadius: 0 
+      },
+      { 
+        data: rpsFailedData, 
+        label: 'Erro', 
+        borderColor: 'rgba(255,99,132,1)', 
+        backgroundColor: 'rgba(255,99,132,0.2)', 
+        fill: false, 
+        pointRadius: 0 
+      }
     ];
     this.chart?.update();
 
-
     // Update Response Time Chart
-    this.responseTimeChartData.datasets = [
-      { data: chartData.responseTimeData.map(d => ({ x: d.x, y: d.y })), label: 'Tempo de Resposta (OK)', borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.2)', fill: false, pointRadius: 0 }
+    this.responseTimeChartData.datasets = [{ 
+      data: chartData.responseTimeData.map(
+        d => ({ x: d.x, y: d.y })), 
+        label: 'Tempo de Resposta (OK)', 
+        borderColor: 'rgba(54, 162, 235, 1)', 
+        backgroundColor: 'rgba(54, 162, 235, 0.2)', 
+        fill: false, 
+        pointRadius: 0 
+      }
     ];
     this.chart?.update();
   }
