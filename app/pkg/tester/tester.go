@@ -2,7 +2,6 @@ package tester
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"sync"
@@ -36,6 +35,7 @@ func NewTester(config, output string) (AppTester, error) {
 		Durations:   make([]time.Duration, 0, appTester.Config.NumberOfUsers*appTester.Config.RequestsPerUser),
 		Requests:    make([]types.RequestInfo, 0, appTester.Config.NumberOfUsers*appTester.Config.RequestsPerUser),
 	}
+	appTester.OutputPath = output
 
 	return &appTester, nil
 }
@@ -93,8 +93,8 @@ func (t *Tester) Start() error {
 }
 
 // Save is responsable to generate a JSON file with the performance test result
-func (t *Tester) Save(outputFile string, obj interface{}) error {
-	err := utils.SaveToJSON(outputFile, obj)
+func (t *Tester) Save() error {
+	err := utils.SaveToJSON(t.OutputPath, *t)
 	if err != nil {
 		return fmt.Errorf("failed to save the JSON file: %v", err)
 	}
@@ -102,28 +102,24 @@ func (t *Tester) Save(outputFile string, obj interface{}) error {
 }
 
 func (t *Tester) Show() error {
-	// if t.Result == types.TestResult{} {
-	// 	return errors.New("failed to show the performance test result")
-	// }
-
 	// Exibir resultados no console
 	fmt.Printf("\nResultados do Teste de Performance:\n")
 	// fmt.Printf("URL testada: %s\n", *url)
-	fmt.Printf("Total de requisições: %d\n", metrics.totalRequests)
-	fmt.Printf("Requisições bem-sucedidas: %d\n", metrics.successRequests)
-	fmt.Printf("Requisições com falha: %d\n", metrics.failedRequests)
-	fmt.Printf("Taxa de erro: %.2f%%\n", result.ErrorRate)
-	fmt.Printf("Tempo total do teste: %v\n", totalTime)
-	fmt.Printf("Latência média: %v\n", avgDuration)
-	fmt.Printf("Latência mínima: %v\n", metrics.minDuration)
-	fmt.Printf("Latência máxima: %v\n", metrics.maxDuration)
-	fmt.Printf("Taxa de requisições por segundo: %.2f\n", result.RequestsPerSec)
-	fmt.Printf("Latência p50: %v\n", percentiles[50])
-	fmt.Printf("Latência p75: %v\n", percentiles[75])
-	fmt.Printf("Latência p90: %v\n", percentiles[90])
-	fmt.Printf("Latência p95: %v\n", percentiles[95])
-	fmt.Printf("Latência p99: %v\n", percentiles[99])
-	fmt.Printf("Resultados salvos em: %s\n", *outputFile)
+	fmt.Printf("Total de requisições: %d\n", t.Metrics.TotalRequests)
+	fmt.Printf("Requisições bem-sucedidas: %d\n", t.Metrics.SuccessRequests)
+	fmt.Printf("Requisições com falha: %d\n", t.Metrics.FailedRequests)
+	fmt.Printf("Taxa de erro: %.2f%%\n", t.Result.ErrorRate)
+	fmt.Printf("Tempo total do teste: %v\n", t.Result.TotalTime)
+	fmt.Printf("Latência média: %v\n", t.Result.AverageLatency)
+	fmt.Printf("Latência mínima: %v\n", t.Metrics.MinDuration)
+	fmt.Printf("Latência máxima: %v\n", t.Metrics.MaxDuration)
+	fmt.Printf("Taxa de requisições por segundo: %.2f\n", t.Result.RequestsPerSec)
+	fmt.Printf("Latência p50: %v\n", t.Result.P50Latency)
+	fmt.Printf("Latência p75: %v\n", t.Result.P75Latency)
+	fmt.Printf("Latência p90: %v\n", t.Result.P90Latency)
+	fmt.Printf("Latência p95: %v\n", t.Result.P95Latency)
+	fmt.Printf("Latência p99: %v\n", t.Result.P99Latency)
+	fmt.Printf("Resultados salvos em: %s\n", t.OutputPath)
 
 	return nil
 }

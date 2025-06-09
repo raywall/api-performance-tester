@@ -27,12 +27,13 @@ type TestConfig struct {
 }
 
 type ConfigObject struct {
-	ID        string           `json:"id"`
-	Squad     string           `json:"squad"`
-	Project   string           `json:"project"`
-	Username  string           `json:"username"`
-	Config    TestConfig       `json:"testConfig"`
-	Scenarios Scenarios        `json:"scenarios"`
-	Result    types.TestResult `json:"results"`
-	Metrics   metrics.Metrics  `json:"-"`
+	ID         string           `json:"id"`
+	Squad      string           `json:"squad"`
+	Project    string           `json:"project"`
+	Username   string           `json:"username"`
+	Config     TestConfig       `json:"testConfig"`
+	Scenarios  Scenarios        `json:"scenarios"`
+	Result     types.TestResult `json:"results"`
+	OutputPath string           `json:"-"`
+	Metrics    *metrics.Metrics `json:"-"`
 }
