@@ -33,7 +33,7 @@ type ConfigObject struct {
 	Username   string           `json:"username"`
 	Config     TestConfig       `json:"testConfig"`
 	Scenarios  Scenarios        `json:"scenarios"`
-	Result     types.TestResult `json:"results"`
+	Result     types.TestResult `json:"result"`
 	OutputPath string           `json:"-"`
 	Metrics    *metrics.Metrics `json:"-"`
 }
