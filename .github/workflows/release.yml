@@ -3,7 +3,7 @@ name: Go Release Binaries
 on:
   push:
     branches:
-      - main
+    - main
 
   jobs:
     build:
@@ -14,38 +14,38 @@ on:
 	  goos: [linux, windows, darwin]
           goarch: [amd64, arm64]
           exclude:
-	    - goos: windows
-              goarch: arm64
+	  - goos: windows
+            goarch: arm64
       steps:
-        - name: Set up Go
-          uses: actions/setup-go@v5
-          with:
-            go-version: '1.24'
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
 
-        - name: Check out code
-          uses: actions/checkout@v4
+      - name: Check out code
+        uses: actions/checkout@v4
 
-        - name: Build
-          working-directory: ./app
-          env:
-            GOOS: ${{ matrix.goos }}
-            GOARCH: ${{ matrix.goarch }}
-	  run: |
-	    if [ "${{ matrix.goos }}" = "windows" ]; then
-	      BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}.exe"
-	    else
-	      BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}"
-	    fi
+      - name: Build
+        working-directory: ./app
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+	run: |
+	  if [ "${{ matrix.goos }}" = "windows" ]; then
+	    BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}.exe"
+	  else
+	    BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}"
+	  fi
           
-	    # Compila o código
-	    go build -v -o "${BINARY_NAME}" ./...
+	  # Compila o código
+	  go build -v -o "${BINARY_NAME}" ./...
 
-	- name: Upload Binary as Artifact
-	  uses: actions/upload-artifact@v4
-	  with:
-	    name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
-	    path: app/myapp-${{ matrix.goos }}-${{ matrix.goarch }}* 
-
+      - name: Upload Binary as Artifact
+	uses: actions/upload-artifact@v4
+	with:
+	  name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
+	  path: app/myapp-${{ matrix.goos }}-${{ matrix.goarch }}* 
+   
     package:
       name: Package Release Binaries
       runs-on: ubuntu-latest
