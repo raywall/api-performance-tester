@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+    - main # Change if your main branch is different
+
+jobs:
+  working-directory: ./preview/
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout the source code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '23.3' # Adjust to your desired version
+
+    # 3. Install dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # 4. Build the Angular project with the correct base href
+    - name: Build Angular project
+      run: npm run build:prod
+      # run: npm run build -- --base-href "https://raywall.github.io/api-pgerformance-tester/"
+
+      # 5. Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages # Branch where the deployment will occur
+        folder: dist/api-performance-tester # Ensure this points to the correct output folder
+        clean: true

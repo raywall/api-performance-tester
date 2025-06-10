@@ -5,7 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import ptBr from '@angular/common/locales/pt';
 import { RouterModule } from '@angular/router';
-import { NgChartsModule } from 'ng2-charts';
+
+import { BaseChartDirective } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
@@ -21,8 +22,8 @@ registerLocaleData(ptBr);
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgChartsModule,
-    RouterModule.forRoot(routes, { useHash: true })
+    RouterModule.forRoot(routes, { useHash: true }),
+    BaseChartDirective
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },

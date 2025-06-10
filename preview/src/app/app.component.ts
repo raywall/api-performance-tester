@@ -10,6 +10,7 @@ import { ptBR } from 'date-fns/locale';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
   standalone: false
 })
 export class AppComponent implements OnInit {
@@ -66,7 +67,6 @@ export class AppComponent implements OnInit {
       x: {
         type: 'time',
         time: {
-          // parser: 'dd/MM/yyyy HH:mm:ss',
           tooltipFormat: 'dd/MM/yyyy HH:mm:ss',
           unit: 'second'
         },
@@ -91,21 +91,21 @@ export class AppComponent implements OnInit {
       tooltip: {
         callbacks: {
           title: (tooltipItems) => {
-            return tooltipItems[0].label;
+            return formatDateTime(new Date(tooltipItems[0].parsed.x).toISOString());
           },
           label: (context) => {
-            const dataPoint = context.raw as { x: any, y: number };
-            return `RPS: <span class="math-inline">\{dataPoint\.y\} \(</span>{context.dataset.label})`;
+            const dataPoint = context.raw as { x: number, y: number };
+            return `RPS: ${dataPoint.y} (${context.dataset.label})`;
           }
         }
       }
     }
   };
-
+  
   public rpsChartData: ChartData<'line'> = {
     datasets: []
   };
-
+  
   public rpsChartType: ChartType = 'line';
 
   // Line Chart - Response Time
@@ -116,7 +116,6 @@ export class AppComponent implements OnInit {
       x: {
         type: 'time',
         time: {
-          parser: 'dd/MM/yyyy HH:mm:ss',
           tooltipFormat: 'dd/MM/yyyy HH:mm:ss',
           unit: 'second'
         },
@@ -140,17 +139,17 @@ export class AppComponent implements OnInit {
       tooltip: {
         callbacks: {
           title: (tooltipItems) => {
-            return tooltipItems[0].label;
+            return formatDateTime(new Date(tooltipItems[0].parsed.x).toISOString()); 
           },
           label: (context) => {
-            const dataPoint = context.raw as { x: any, y: number };
+            const dataPoint = context.raw as { x: number, y: number }; 
             return `Tempo: ${dataPoint.y}ms`;
           }
         }
       }
     }
   };
-
+  
   public responseTimeChartData: ChartData<'line'> = {
     datasets: []
   };
@@ -194,35 +193,14 @@ export class AppComponent implements OnInit {
     const rpsFailedData = chartData.requestsPerSecondData.filter(d => d.status === 'failed').map(d => ({ x: d.x, y: d.y }));
 
     this.rpsChartData.datasets = [
-      { 
-        data: rpsSuccessData, 
-        label: 'OK', 
-        borderColor: 'rgba(75,192,192,1)', 
-        backgroundColor: 'rgba(75,192,192,0.2)', 
-        fill: false, 
-        pointRadius: 0 
-      },
-      { 
-        data: rpsFailedData, 
-        label: 'Erro', 
-        borderColor: 'rgba(255,99,132,1)', 
-        backgroundColor: 'rgba(255,99,132,0.2)', 
-        fill: false, 
-        pointRadius: 0 
-      }
+      { data: rpsSuccessData, label: 'OK', borderColor: 'rgba(75,192,192,1)', backgroundColor: 'rgba(75,192,192,0.2)', fill: false, pointRadius: 0 },
+      { data: rpsFailedData, label: 'Erro', borderColor: 'rgba(255,99,132,1)', backgroundColor: 'rgba(255,99,132,0.2)', fill: false, pointRadius: 0 }
     ];
-    this.chart?.update();
+    // this.chart?.update();
 
     // Update Response Time Chart
-    this.responseTimeChartData.datasets = [{ 
-      data: chartData.responseTimeData.map(
-        d => ({ x: d.x, y: d.y })), 
-        label: 'Tempo de Resposta (OK)', 
-        borderColor: 'rgba(54, 162, 235, 1)', 
-        backgroundColor: 'rgba(54, 162, 235, 0.2)', 
-        fill: false, 
-        pointRadius: 0 
-      }
+    this.responseTimeChartData.datasets = [
+      { data: chartData.responseTimeData.map(d => ({ x: d.x, y: d.y })), label: 'Tempo de Resposta (OK)', borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 0.2)', fill: false, pointRadius: 0 }
     ];
     this.chart?.update();
   }

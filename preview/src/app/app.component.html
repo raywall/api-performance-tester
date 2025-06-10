@@ -1,18 +1,18 @@
 <div class="container-fluid py-4">
-  <h1 class="mb-4 text-center">Dashboard de Performance</h1>
+  <h2 class="mb-4 text-center">Performance Test Result</h2>
 
   <div class="card mb-4 shadow-sm">
-    <div class="card-body">
-      <div class="d-flex align-items-center mb-3">
-        <label for="jsonFile" class="form-label mb-0 me-3">Carregar arquivo JSON:</label>
+    <div class="card-body load-label">
+      <div class="d-flex align-items-center mb-3 pt-3">
+        <label for="jsonFile" class="form-label pt-1 mb-0 me-3">Load JSON file:</label>
         <input type="file" id="jsonFile" class="form-control" (change)="onFileSelected($event)" accept=".json">
       </div>
 
       <div *ngIf="isLoading" class="text-center text-primary">
         <div class="spinner-border" role="status">
-          <span class="visually-hidden">Carregando...</span>
+          <span class="visually-hidden">Loading...</span>
         </div>
-        <p class="mt-2">Carregando dados...</p>
+        <p class="mt-2">Loading data...</p>
       </div>
 
       <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
@@ -27,43 +27,20 @@
         <div class="card h-100 shadow-sm">
           <div class="card-body d-flex flex-column justify-content-between">
             <div>
-              <small class="text-muted">ID da execução:</small>
-              <h5 class="card-title mb-2">{{ performanceReport.id }}</h5>
+              <small class="text-muted result-label">Execution ID:</small>
+              <h5 class="card-title mb-1 result-value">{{ performanceReport.id }}</h5>
             </div>
             <div>
-              <small class="text-muted">Squad:</small>
-              <h5 class="card-title mb-2">{{ performanceReport.squad }}</h5>
+              <small class="text-muted result-label">Squad:</small>
+              <h5 class="card-title mb-1 result-value">{{ performanceReport.squad }}</h5>
             </div>
             <div>
-              <small class="text-muted">Projeto:</small>
-              <h5 class="card-title mb-2">{{ performanceReport.project }}</h5>
+              <small class="text-muted result-label">Project:</small>
+              <h5 class="card-title mb-1 result-value">{{ performanceReport.project }}</h5>
             </div>
             <div>
-              <small class="text-muted">Usuário:</small>
-              <h5 class="card-title mb-0">{{ performanceReport.username }}</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column justify-content-between">
-            <div>
-              <small class="text-muted">Início da execução:</small>
-              <h5 class="card-title mb-2">{{ formatDateTimeDisplay(performanceReport.result.requests[0]?.timestamp) }}</h5>
-            </div>
-            <div>
-              <small class="text-muted">Duração da execução:</small>
-              <h5 class="card-title mb-2">{{ getExecutionDuration() }}</h5>
-            </div>
-            <div>
-              <small class="text-muted">Usuários simultâneos:</small>
-              <h5 class="card-title mb-2">{{ performanceReport.testConfig.numberOfUsers }}</h5>
-            </div>
-            <div>
-              <small class="text-muted">Funcionalidades testadas:</small>
-              <h5 class="card-title mb-0">{{ performanceReport.scenarios.length }}</h5>
+              <small class="text-muted result-label">Username:</small>
+              <h5 class="card-title mb-0 result-value">{{ performanceReport.username }}</h5>
             </div>
           </div>
         </div>
@@ -73,20 +50,43 @@
         <div class="card h-100 shadow-sm">
           <div class="card-body d-flex flex-column justify-content-between">
             <div>
-              <small class="text-muted">Média de Requisições/s (RPS):</small>
-              <h5 class="card-title mb-2">{{ performanceReport.result.requestsPerSecond | number:'1.2-2' }}</h5>
+              <small class="text-muted result-label">Start of execution:</small>
+              <h5 class="card-title mb-1 result-value">{{ formatDateTimeDisplay(performanceReport.result.requests[0].timestamp) }}</h5>
             </div>
             <div>
-              <small class="text-muted">Tempo Médio (OK):</small>
-              <h5 class="card-title mb-2">{{ formatDurationDisplay(performanceReport.result.averageLatency) }}</h5>
+              <small class="text-muted result-label">Duration:</small>
+              <h5 class="card-title mb-1 result-value">{{ getExecutionDuration() }}</h5>
             </div>
             <div>
-              <small class="text-muted">Percentil 95 (P95):</small>
-              <h5 class="card-title mb-2">{{ formatDurationDisplay(performanceReport.result.p95Latency) }}</h5>
+              <small class="text-muted result-label">Number of users:</small>
+              <h5 class="card-title mb-1 result-value">{{ performanceReport.testConfig.numberOfUsers }}</h5>
             </div>
             <div>
-              <small class="text-muted">Percentil 99 (P99):</small>
-              <h5 class="card-title mb-0">{{ formatDurationDisplay(performanceReport.result.p99Latency) }}</h5>
+              <small class="text-muted result-label">Number of scenarios:</small>
+              <h5 class="card-title mb-0 result-value">{{ performanceReport.scenarios.length }}</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <small class="text-muted result-label">Average of requests per second (RPS):</small>
+              <h5 class="card-title mb-2 result-value">{{ performanceReport.result.requestsPerSecond | number:'1.2-2' }}</h5>
+            </div>
+            <div>
+              <small class="text-muted result-label">Average latency (OK):</small>
+              <h5 class="card-title mb-2 result-value">{{ formatDurationDisplay(performanceReport.result.averageLatency) }}</h5>
+            </div>
+            <div>
+              <small class="text-muted result-label">P95 Latency:</small>
+              <h5 class="card-title mb-2 result-value">{{ formatDurationDisplay(performanceReport.result.p95Latency) }}</h5>
+            </div>
+            <div>
+              <small class="text-muted result-label">P99 Latency:</small>
+              <h5 class="card-title mb-0 result-value">{{ formatDurationDisplay(performanceReport.result.p99Latency) }}</h5>
             </div>
           </div>
         </div>
@@ -106,12 +106,12 @@
               <table class="table table-sm table-borderless mb-0">
                 <tbody>
                   <tr>
-                    <td><span class="badge bg-success">OK</span></td>
+                    <td><span class="badge bg-success">Success</span></td>
                     <td>{{ performanceReport.result.successRequests }}</td>
                     <td>{{ (performanceReport.result.successRequests / performanceReport.result.totalRequests * 100) | number:'1.2-2' }}%</td>
                   </tr>
                   <tr>
-                    <td><span class="badge bg-danger">Erro</span></td>
+                    <td><span class="badge bg-danger">Error</span></td>
                     <td>{{ performanceReport.result.failedRequests }}</td>
                     <td>{{ (performanceReport.result.failedRequests / performanceReport.result.totalRequests * 100) | number:'1.2-2' }}%</td>
                   </tr>
@@ -129,7 +129,7 @@
       <div class="col-md-6">
         <div class="card h-100 shadow-sm">
           <div class="card-header text-center">
-            <h5>Requisições por Segundo (OK vs Erro)</h5>
+            <h5>Requests per second (success vs error)</h5>
           </div>
           <div class="card-body chart-container-large">
             <canvas baseChart
@@ -144,7 +144,7 @@
       <div class="col-md-6">
         <div class="card h-100 shadow-sm">
           <div class="card-header text-center">
-            <h5>Tempo de Resposta de Requisições OK (ms)</h5>
+            <h5>Latency of success requests (ms)</h5>
           </div>
           <div class="card-body chart-container-large">
             <canvas baseChart

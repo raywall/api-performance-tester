@@ -1,0 +1,20 @@
+.load-label {
+    font-size: 10pt;
+    white-space: nowrap!important;
+}
+
+.result-label {
+    font-size:9pt!important;
+}
+
+.result-value {
+    font-size:10pt!important;
+}
+
+.graphic-title {
+    padding-top:13pt;
+}
+
+.graphic-title h5 {
+    font-size:12pt!important;
+}
