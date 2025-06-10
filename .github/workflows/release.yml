@@ -6,18 +6,18 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build Release Binaries
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goos: [linux, windows, darwin]
-        goarch: [amd64, arm64]
-        exclude:
-          - goos: windows
-            goarch: arm64
+	build:
+		name: Build Release Binaries
+		runs-on: ubuntu-latest
+		strategy:
+			matrix:
+				goos: [linux, windows, darwin]
+				goarch: [amd64, arm64]
+				exclude:
+					- goos: windows
+						goarch: arm64
 
-    steps:
+		steps:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -31,53 +31,49 @@ jobs:
         env:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
-        run: |
-          # Define o nome do binário, adicionando .exe para Windows
-          if [ "${{ matrix.goos }}" = "windows" ]; then
-            BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}.exe"
-          else
-            BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}"
-          fi
+				run: |
+					if [ "${{ matrix.goos }}" = "windows" ]; then
+						BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}.exe"
+					else
+						BINARY_NAME="myapp-${{ matrix.goos }}-${{ matrix.goarch }}"
+					fi
           
-          # Compila o código
-          go build -v -o "${BINARY_NAME}" ./...
+					# Compila o código
+					go build -v -o "${BINARY_NAME}" ./...
 
-      - name: Upload Binary as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          # Salva cada binário como um artefato separado para ser usado no próximo job
-          name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: app/myapp-${{ matrix.goos }}-${{ matrix.goarch }}* # O * garante que o .exe do windows será pego
+			- name: Upload Binary as Artifact
+				uses: actions/upload-artifact@v4
+				with:
+					name: binary-${{ matrix.goos }}-${{ matrix.goarch }}
+					path: app/myapp-${{ matrix.goos }}-${{ matrix.goarch }}* 
 
-  # --- JOB 2: Agrupa os binários na pasta 'dist' ---
-  package:
+	package:
     name: Package Release Binaries
     runs-on: ubuntu-latest
-    needs: build # Garante que este job só rode após o job 'build' ser concluído com sucesso
+    needs: build 
     
     steps:
-      - name: Create dist directory
-        run: mkdir dist
+			- name: Create dist directory
+				run: mkdir dist
 
-      - name: Download all binary artifacts
-        uses: actions/download-artifact@v4
-        with:
-          # Baixa todos os artefatos para a pasta 'dist'
-          path: dist
+			- name: Download all binary artifacts
+				uses: actions/download-artifact@v4
+				with:
+					path: dist
 
-        - name: Organize files in dist
-        run: |
-          cd dist
-          # O download-artifact cria uma subpasta para cada artefato.
-          # Este comando move todos os arquivos das subpastas para a raiz de 'dist'.
+			- name: Organize files in dist
+				run: |
+					cd dist
           find . -mindepth 2 -type f -exec mv {} . \;
+
           # Remove as subpastas vazias
           find . -mindepth 1 -type d -empty -delete
+
           # Exibe o conteúdo final da pasta dist
           ls -l
 
-      - name: Upload dist folder as a final artifact
-        uses: actions/upload-artifact@v4
-        with:
+			- name: Upload dist folder as a final artifact
+				uses: actions/upload-artifact@v4
+				with:
           name: release-dist # Nome do artefato final
-          path: dist/ # Faz o upload de toda a pasta 'dist'
+          path: dist/ 
