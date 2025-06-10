@@ -6,10 +6,11 @@ on:
     - main # Change if your main branch is different
 
 jobs:
-  working-directory: ./preview/
-
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./preview/
 
     steps:
     # 1. Checkout the source code
