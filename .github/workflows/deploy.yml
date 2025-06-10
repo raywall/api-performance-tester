@@ -37,5 +37,5 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages # Branch where the deployment will occur
-        folder: dist/api-performance-tester # Ensure this points to the correct output folder
+        folder: dist # Ensure this points to the correct output folder
         clean: true
