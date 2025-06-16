@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/raywall/api-performance-tester/internal/types"
+	"github.com/raywall/api-performance-tester/perf/internal/types"
 )
 
 // Função que realiza as requisições para um usuário

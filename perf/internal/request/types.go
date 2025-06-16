@@ -1,8 +1,8 @@
 package request
 
 import (
-	"github.com/raywall/api-performance-tester/internal/metrics"
-	"github.com/raywall/api-performance-tester/internal/types"
+	"github.com/raywall/api-performance-tester/perf/internal/metrics"
+	"github.com/raywall/api-performance-tester/perf/internal/types"
 )
 
 type RequestConfig struct {

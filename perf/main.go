@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/raywall/api-performance-tester/pkg/tester"
+	"github.com/raywall/api-performance-tester/perf/pkg/tester"
 )
 
 func main() {

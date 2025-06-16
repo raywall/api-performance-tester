@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/raywall/api-performance-tester/internal/types"
+	"github.com/raywall/api-performance-tester/perf/internal/types"
 )
 
 // Metrics represents the general metrics collected

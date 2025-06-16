@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/raywall/api-performance-tester/internal/metrics"
-	"github.com/raywall/api-performance-tester/internal/request"
-	"github.com/raywall/api-performance-tester/internal/types"
-	"github.com/raywall/api-performance-tester/pkg/utils"
+	"github.com/raywall/api-performance-tester/perf/internal/metrics"
+	"github.com/raywall/api-performance-tester/perf/internal/request"
+	"github.com/raywall/api-performance-tester/perf/internal/types"
+	"github.com/raywall/api-performance-tester/perf/pkg/utils"
 )
 
 func NewTester(config, output string) (AppTester, error) {
