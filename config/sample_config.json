@@ -1,0 +1,26 @@
+{
+    "id": "b3d66e38-3d2a-4a85-8645-55d015fd7eab",
+    "squad": "dreamteam",
+    "project": "performance tester",
+    "username": "raysouz",
+    "testConfig": {
+        "numberOfUsers": 10,
+        "requestsPerUser": 2
+    },
+    "scenarios": [
+        {
+            "id": "ada7c904-63fc-42f4-8506-859e6a5e8453",
+            "name": "graphql",
+            "description": "graphql performance test",
+            "requestConfig": {
+                "baseUrl": "http://localhost:8080",
+                "route": "/graphql",
+                "method": "POST",
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "payload": "{\"query\": \"{query: dataSources(codigoLoja:1234){loja{codigoLoja,nomeFantasia},colaboradores{codigoColaborador,nomeColaborador}}}\"}"
+            }
+        }
+    ]
+}
