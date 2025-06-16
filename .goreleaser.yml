@@ -5,7 +5,7 @@ project_name: api-performance-tester
 
 builds:
 - id: api-performance-tester
-  main: ./
+  main: ./app
   binary: perf
   env:
   - CGO_ENABLED=0
